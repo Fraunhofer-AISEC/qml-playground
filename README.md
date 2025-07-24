@@ -63,7 +63,7 @@ This makes it the ideal model for educational purposes and for understanding how
 
 ```bash
 # 1. Clone this repository
-git clone https://github.com/yourusername/qml-playground.git
+git clone https://github.com/fraunhofer-aisec/qml-playground
 cd qml-playground
 
 # 2. Set up virtual environment
