@@ -110,6 +110,8 @@ If you use this tool in your research or presentations, please cite:
 > P. Debus, S. Issel, and K. Tscharke, "Quantum Machine Learning Playground," *IEEE Computer Graphics and Applications*, vol. 44, no. 05, pp. 40–53, Sept.-Oct. 2024.  
 > DOI: [10.1109/MCG.2024.3456288](https://doi.ieeecomputersociety.org/10.1109/MCG.2024.3456288)
 
+The arXiv version of this paper is available here: [2507.17931](https://arxiv.org/abs/2507.17931)
+
 ---
 
 ## 🙋 Maintainer
