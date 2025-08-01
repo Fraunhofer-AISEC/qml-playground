@@ -1,3 +1,6 @@
+[![DOI](https://img.shields.io/badge/DOI-10.1109/MCG.2024.3456288-yellow)](https://doi.ieeecomputersociety.org/10.1109/MCG.2024.3456288)
+[![arXiv](https://img.shields.io/badge/arXiv-2507.17931-b31b1b.svg?style=flat)](https://arxiv.org/abs/2507.17931)
+
 <p align="center">
   <img src="QMLPG_Visual.png" alt="QML Playground Illustration" width="200"/>
 </p>
