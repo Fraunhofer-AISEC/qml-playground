@@ -299,13 +299,16 @@ def update_circuit_plot(num_qubits: int, num_layers: int, model_parameters: str)
     state=[
         State(component_id="select_lr", component_property="value"),
         State(component_id="select_batch_size", component_property="value"),
+        State(component_id="select_reg_type", component_property="value"),
+        State(component_id="select_reg_strength", component_property="value"),
         State(component_id="train_datastore", component_property="data"),
         State(component_id="model_parameters", component_property="data"),
     ],
 )
 def single_epoch(num_clicks: int, num_intervals: int, reset_clicks: int,
                  num_qubits: int, num_layers: int, selected_data_set: str,
-                 lr: float, batch_size: int, train_data, model_parameters):
+                 lr: float, batch_size: int, reg_type: str, reg_strength: float,
+                 train_data, model_parameters):
     """
     Performs a single training epoch for the quantum model using the provided parameters.
     
@@ -325,6 +328,10 @@ def single_epoch(num_clicks: int, num_intervals: int, reset_clicks: int,
     :type lr: float
     :param batch_size: Size of training batches
     :type batch_size: int
+    :param reg_type: Type of regularization (none, l1, l2)
+    :type reg_type: str
+    :param reg_strength: Strength of regularization
+    :type reg_strength: float
     :param train_data: Training data in JSON format
     :param model_parameters: Current model parameters
     :return: Updated model parameters and current epoch number
@@ -345,7 +352,7 @@ def single_epoch(num_clicks: int, num_intervals: int, reset_clicks: int,
     model_parameters = unserialize_model_dict(model_parameters)
     qcl.load_model(model_parameters)
 
-    qcl.train_single_epoch(df_train[["x", "y"]].values, df_train["label"].values, lr, batch_size)
+    qcl.train_single_epoch(df_train[["x", "y"]].values, df_train["label"].values, lr, batch_size, reg_type, reg_strength)
     model_parameters = qcl.save_model()
 
     return [json.dumps(model_parameters), model_parameters["config"]["epoch"]]
