@@ -64,6 +64,38 @@ settings = html.Div([
             multi=False
         ),
         ], className="columnContainer"),
+        html.Div([
+        html.H3("Regularization Type"),
+        dcc.Dropdown(
+            id="select_reg_type",
+            options=[
+                {"value": "none", "label": "None"},
+                {"value": "l1", "label": "L1"},
+                {"value": "l2", "label": "L2"},
+            ],
+            value="none",
+            multi=False
+        ),
+        ], className="columnContainer"),
+        html.Div([
+        html.H3("Regularization Strength"),
+        dcc.Dropdown(
+            id="select_reg_strength",
+            options=[
+                {"value": 0.001, "label": 0.001},
+                {"value": 0.005, "label": 0.005},
+                {"value": 0.01, "label": 0.01},
+                {"value": 0.05, "label": 0.05},
+                {"value": 0.1, "label": 0.1},
+                {"value": 0.5, "label": 0.5},
+                {"value": 1.0, "label": 1.0},
+                {"value": 5.0, "label": 5.0},
+                {"value": 10.0, "label": 10.0},
+            ],
+            value=0.01,
+            multi=False
+        ),
+        ], className="columnContainer"),
     ], className="rowContainer longContainer",
         style={'justify-content': 'space-around',
                'margin': '0px'}

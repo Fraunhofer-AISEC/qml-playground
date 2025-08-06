@@ -262,7 +262,7 @@ class QuantumReuploadingClassifier:
 
         return results
 
-    def train_single_epoch(self, X, y, lr=0.1, batch_size=32):
+    def train_single_epoch(self, X, y, lr=0.1, batch_size=32, reg_type="none", reg_strength=0.01):
         """Train the quantum model for a single epoch.
 
         This method performs one epoch of training using mini-batch gradient descent.
@@ -274,16 +274,31 @@ class QuantumReuploadingClassifier:
             y (numpy.ndarray): Training labels of shape (n_samples,)
             lr (float, optional): Learning rate for the optimizer. Defaults to 0.1.
             batch_size (int, optional): Size of mini-batches for training. Defaults to 32.
+            reg_type (str, optional): Type of regularization ('none', 'l1', 'l2'). Defaults to "none".
+            reg_strength (float, optional): Strength of regularization. Defaults to 0.01.
 
         Returns:
             None
         """
-        opt = Adam(self.model.parameters(), lr=lr, betas=(0.9, 0.999))
+        # Configure weight decay (L2 regularization) if selected
+        weight_decay = 0.0
+        if reg_type == "l2":
+            weight_decay = reg_strength
+            
+        opt = Adam(self.model.parameters(), lr=lr, betas=(0.9, 0.999), weight_decay=weight_decay)
 
         for Xbatch, ybatch in batch_loader(X, y, batch_size=batch_size):
             opt.zero_grad()
             output_states = self.model(Xbatch)[-1]
             loss = self.loss(output_states, ybatch)
+            
+            # Apply L1 regularization if selected
+            if reg_type == "l1":
+                l1_loss = 0
+                for param in self.model.parameters():
+                    l1_loss += torch.sum(torch.abs(param))
+                loss += reg_strength * l1_loss
+                
             loss.backward()
             opt.step()
 
