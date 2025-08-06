@@ -119,6 +119,6 @@ The arXiv version of this paper is available here: [2507.17931](https://arxiv.or
 
 ## 🙋 Maintainer
 
-Developed and maintained by **[Pascal Debus](https://github.com/pdebus)**, Quantum Security Technologies (QST), Fraunhofer AISEC
+Developed and maintained by **[Pascal Debus](https://github.com/pdebus)**, [Quantum Security Technologies (QST)](https://www.aisec.fraunhofer.de/en/fields-of-expertise/CST/QST.html), Fraunhofer AISEC
 
 If you find this work useful, feel free to connect or reach out for collaboration opportunities!
