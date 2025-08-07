@@ -2,8 +2,11 @@ version: '3.8'
 
 services:
   dash-app:
-    image: ghcr.io/fraunhofer-aisec/qml-playground:latest
-    container_name: dash_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: qml-playground:local-test
+    container_name: dash_app_build_test
     restart: unless-stopped
     expose:
       - "8050"
@@ -16,11 +19,11 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     networks:
-      - dash-network
+      - dash-build-test-network
 
   nginx:
-    image: nginx:latest
-    container_name: dash_nginx
+    image: nginx:alpine
+    container_name: dash_nginx_build_test
     restart: unless-stopped
     ports:
       - "80:80"
@@ -35,8 +38,8 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - dash-network
+      - dash-build-test-network
 
 networks:
-  dash-network:
+  dash-build-test-network:
     driver: bridge
