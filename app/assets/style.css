@@ -38,6 +38,7 @@ h2 {
     width: 300px;
     position: relative;
     background-color: #FFFFFF;
+    overflow: visible;
     /*border: 1px #009374;*/
     /*border-radius: 0px 0px 10px 0px;*/
     /*box-shadow: 2px 2px 0px 0px #F0F0F0;*/
@@ -162,6 +163,14 @@ h2 {
     background-color: rgba(255, 255, 255, .95);
     box-shadow: none;
     color: #009374;
+}
+
+.Select-menu-outer {
+    z-index: 2000 !important;
+}
+
+.VirtualizedSelectOption {
+    z-index: 2000 !important;
 }
 
 /* General button style */

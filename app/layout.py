@@ -51,19 +51,20 @@ settings = html.Div([
         ], className="columnContainer"),
         html.Div([
         html.H3("Learning Rate"),
-        dcc.Dropdown(
-            id="select_lr",
-            options=[
-                {"value": 0.001, "label": 0.001},
-                {"value": 0.01, "label": 0.01},
-                {"value": 0.05, "label": 0.05},
-                {"value": 0.1, "label": 0.1},
-                {"value": 0.5, "label": 0.5},
-            ],
-            value=0.01,
-            multi=False
-        ),
-        ], className="columnContainer"),
+            html.Div([
+            dcc.Dropdown(
+                id="select_lr",
+                options=[
+                    {"value": 0.001, "label": 0.001},
+                    {"value": 0.01, "label": 0.01},
+                    {"value": 0.05, "label": 0.05},
+                    {"value": 0.1, "label": 0.1},
+                    {"value": 0.5, "label": 0.5},
+                ],
+                value=0.01,
+                multi=False
+            ), ], style={"position": "relative", "zIndex": 1000, "overflow": "visible"})
+            ], className="columnContainer"),
         html.Div([
         html.H3("Regularization Type"),
         dcc.Dropdown(
@@ -79,22 +80,24 @@ settings = html.Div([
         ], className="columnContainer"),
         html.Div([
         html.H3("Regularization Strength"),
-        dcc.Dropdown(
-            id="select_reg_strength",
-            options=[
-                {"value": 0.001, "label": 0.001},
-                {"value": 0.005, "label": 0.005},
-                {"value": 0.01, "label": 0.01},
-                {"value": 0.05, "label": 0.05},
-                {"value": 0.1, "label": 0.1},
-                {"value": 0.5, "label": 0.5},
-                {"value": 1.0, "label": 1.0},
-                {"value": 5.0, "label": 5.0},
-                {"value": 10.0, "label": 10.0},
-            ],
-            value=0.01,
-            multi=False
-        ),
+            html.Div([
+            dcc.Dropdown(
+                id="select_reg_strength",
+                options=[
+                    {"value": 0.001, "label": 0.001},
+                    {"value": 0.005, "label": 0.005},
+                    {"value": 0.01, "label": 0.01},
+                    {"value": 0.05, "label": 0.05},
+                    {"value": 0.1, "label": 0.1},
+                    {"value": 0.5, "label": 0.5},
+                    {"value": 1.0, "label": 1.0},
+                    {"value": 5.0, "label": 5.0},
+                    {"value": 10.0, "label": 10.0},
+                ],
+                value=0.01,
+                multi=False
+            ),], style={"position": "relative", "zIndex": 1000, "overflow": "visible"})
+
         ], className="columnContainer"),
     ], className="rowContainer longContainer",
         style={'justify-content': 'space-around',
@@ -155,13 +158,19 @@ data_settings = html.Div([
 # Main plot
 model_plot = html.Div([
     html.H2("Model"),
-    dcc.Graph(
-        id="graph_circuit",
-        #style={"width": 300, "height": 300}
+    html.Div(
+        [
+        dcc.Graph(
+            id="graph_circuit",
+            style={"width": 700, "height": 200},
+        ),
+            ],
+        id="circuit_container",
+        style={"width": 700, "height": 200},
     ),
     dcc.Graph(
         id="graph_model",
-        #style={"width": 300, "height": 300}
+       # style={"width": 700, "height": 300},
     ),
 ], className="longContainer container")
 

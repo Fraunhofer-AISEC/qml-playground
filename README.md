@@ -90,6 +90,10 @@ python app_dev.py
 Then visit: [http://127.0.0.1:8050/](http://127.0.0.1:8050/)
 
 ### Docker Deployment
+Pull the latest Docker image from the GitHub Container Registry: 
+```bash
+docker pull ghcr.io/fraunhofer-aisec/qml-playground:latest
+```
 
 ```bash
 docker-compose up -d  # Start container
