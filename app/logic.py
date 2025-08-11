@@ -18,7 +18,7 @@ from utils.trace_updates import create_extendData_dicts
 from layout import layout_overall
 from plotting import *
 
-qml_app = dash.Dash(__name__, url_base_pathname='/qml-playground/')
+qml_app = dash.Dash(__name__, url_base_pathname='/qml-playground/', title="QML Playground")
 # Assign layout
 qml_app.layout = layout_overall
 
