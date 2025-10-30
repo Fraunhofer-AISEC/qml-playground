@@ -61,12 +61,13 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
      * @param {number} num_qubits - Number of qubits in the quantum system (1 or 2)
      * @param {number} num_layers - Number of layers in the quantum circuit
      * @param {string} selected_data_set - Name of the selected dataset
+     * @param {string} selected_task - Name of the selected task
      * @param {string} test_data - JSON string containing test data with points and labels
      * @returns {Array} Array containing [data_dict, trace_indices, max_points] for Plotly.extendData
      */
-    updateLayerStatePlots: function(quantum_state_store, num_qubits, num_layers, selected_data_set, test_data) {
+    updateLayerStatePlots: function(quantum_state_store, num_qubits, num_layers, selected_data_set, selected_task, test_data) {
 
-        if (!quantum_state_store || !test_data) {
+        if (!quantum_state_store || !test_data || !selected_task) {
             return window.dash_clientside.no_update;
         }
 
@@ -98,8 +99,14 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             )
         );
 
-        let labels = dfTest.data.map(row => row[dfTest.columns.indexOf("label")]);
-        let numClasses = Math.max(...labels) + 1;
+        if (typeof selected_task === 'string' && selected_task === 'regression') {
+            labels = dfTest.data.map(row => 1);
+            numClasses = 2;
+        }
+        else {
+            labels = dfTest.data.map(row => row[dfTest.columns.indexOf("label")]);
+            numClasses = Math.max(...labels) + 1;
+        }
 
         let traceOffset = num_qubits === 1 ? 7 : 6;
         let tracesPerSubfigure = traceOffset + 4;
@@ -179,12 +186,13 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
          * @param {string} quantum_state_store - JSON string containing quantum states for each layer
          * @param {number} num_qubits - Number of qubits in the quantum system (1 or 2)
          * @param {string} selected_data_set - Name of the selected dataset
+         * @param {string} selected_task - Name of the selected task
          * @param {string} test_data - JSON string containing test data with points and labels
          * @returns {Array} Array containing [data_dict, trace_indices, max_points] for Plotly.extendData
          */
-        updateFinalPlot: function(quantum_state_store, num_qubits, selected_data_set, test_data) {
+        updateFinalPlot: function(quantum_state_store, num_qubits, selected_data_set, selected_task, test_data) {
 
-            if (!quantum_state_store || !test_data) {
+            if (!quantum_state_store || !test_data || !selected_task) {
                 return window.dash_clientside.no_update;
             }
 
@@ -219,8 +227,16 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
 
             let lastLayer = layer_states[layer_states.length - 1];
 
-            let labels = dfTest.data.map(row => row[dfTest.columns.indexOf("label")]);
-            let numClasses = Math.max(...labels) + 1;
+            let labels;
+            let numClasses;
+            if (typeof selected_task === 'string' && selected_task === 'regression') {
+                labels = dfTest.data.map(row => 1);
+                numClasses = 2;
+            }
+            else {
+                labels = dfTest.data.map(row => row[dfTest.columns.indexOf("label")]);
+                numClasses = Math.max(...labels) + 1;
+            }
 
             let stateTraces = [];
 
@@ -292,12 +308,13 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
          *
          * @param {string} prediction_store - JSON string containing model predictions
          * @param {string} selected_data_set - Name of the selected dataset
+         * @param {string} selected_task - Name of the selected task
          * @param {string} test_data - JSON string containing test data with points and labels
          * @returns {Array} Array containing [data_dict, trace_indices, max_points] for Plotly.extendData
          */
-        updateResultsPlot: function(prediction_store, selected_data_set, test_data) {
+        updateResultsPlot: function(prediction_store, selected_data_set, selected_task, test_data) {
 
-            if (!prediction_store || !test_data) {
+            if (!prediction_store || !test_data || !selected_task) {
                 return window.dash_clientside.no_update;
             }
 
@@ -317,6 +334,27 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
                 return window.dash_clientside.no_update;
             }
 
+            // Regression branch: fourier_* datasets
+            if (typeof selected_task === 'string' && selected_task === 'regression') {
+                // dfTest has columns ["x","y"]
+                const xIdx = dfTest.columns.indexOf("x");
+                const yIdx = dfTest.columns.indexOf("y");
+                if (xIdx === -1 || yIdx === -1) {
+                    return window.dash_clientside.no_update;
+                }
+                const x = dfTest.data.map(row => row[xIdx]);
+                const yTrue = dfTest.data.map(row => row[yIdx]);
+                if (!Array.isArray(predictions) || predictions.length !== yTrue.length) {
+                    // Length mismatch; do nothing
+                    return window.dash_clientside.no_update;
+                }
+                const residuals = predictions.map((yp, i) => yp - yTrue[i]);
+                const dataDict = { x: [x], y: [residuals] };
+                const maxPoints = { x: [x.length], y: [residuals.length] };
+                return [dataDict, [0], maxPoints];
+            }
+
+            // Classification branch (default)
             let labels = dfTest.data.map(row => row[dfTest.columns.indexOf("label")]);
             let xPoints = dfTest.data.map(row => row[dfTest.columns.indexOf("x")]);
             let yPoints = dfTest.data.map(row => row[dfTest.columns.indexOf("y")]);
@@ -347,9 +385,9 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             traces.push(WrongPoints);
             traceIdxs.push(4);
 
-             let RightPoints = {
-                x: xPoints.filter((_, i) => checks[i]),
-                y: yPoints.filter((_, i) => checks[i])
+            let RightPoints = {
+               x: xPoints.filter((_, i) => checks[i]),
+               y: yPoints.filter((_, i) => checks[i])
             };
             traces.push(RightPoints);
             traceIdxs.push(5);

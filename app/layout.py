@@ -1,6 +1,7 @@
 from dash import dcc
 from dash import html
 
+from data.datasets_torch import classification_datasets
 
 control = html.Div([
     html.H2("Control"),
@@ -126,20 +127,22 @@ performance_plot = html.Div([
 ], className="container", style={"height": "200px"})
 
 # Data
+
 data_settings = html.Div([
-    html.H2("Data"),
+    html.H2("Data and Uncertainty"),
+    html.H3("Task Type"),
+    dcc.RadioItems(
+        id="select_task_type",
+        options=[{'label': 'Classification', 'value': 'classification'},
+                 {'label': 'Regression', 'value': 'regression'},
+                 ],
+        value='classification',
+        inline=True,
+    ),
     html.H3("Data Set"),
     dcc.Dropdown(
         id="select_data_set",
-        options=[
-            {"label": "Circle", "value": "circle"},
-            {"label": "3 Circles", "value": "3_circles"},
-            {"label": "Square", "value": "square"},
-            {"label": "4 Squares", "value": "4_squares"},
-            {"label": "Crown", "value": "crown"},
-            {"label": "Tri Crown", "value": "tricrown"},
-            {"label": "Wavy Lines", "value": "wavy_lines"},
-        ],
+        options=[{"label": v, "value": k} for k, v in classification_datasets.items() ],
         value="circle",
     ),
     dcc.Graph(
@@ -152,6 +155,26 @@ data_settings = html.Div([
         min=1, max=128, step=1, value=32,
         # tooltip={"always_visible": True, "placement": "bottom"},
         marks={i: str(i) for i in range(16, 129, 16)}
+    ),
+    html.Hr(style={"margin-top": "10px", "color": "#A0A0A0"}),
+    html.H3("Uncertainty Quantification", style={
+        "margin-top":"20px",
+        "margin-bottom":"15px",
+        "color":"#A0A0A0",
+        "font-size":"18px",
+        "text-align":"center",
+    }),
+    html.H3("Gaussian Dropout Sigma"),
+    dcc.Slider(
+        id="select_noise_sigma",
+        min=0.0, max=1.0, step=0.01, value=0.0,
+        marks={i / 10: str(i / 10) for i in range(0, 11, 1)}
+    ),
+    html.H3("MC Runs (inference)"),
+    dcc.Slider(
+        id="select_mc_runs",
+        min=1, max=30, step=1, value=1,
+        marks={i: str(i) for i in range(5, 30, 5)}
     ),
 ], className="container")
 
