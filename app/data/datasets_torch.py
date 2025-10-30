@@ -7,10 +7,36 @@ from itertools import product
 logger = logging.getLogger(" [Data]")
 
 
+regression_datasets = {
+    'fourier_1': 'Fourier series degree 1',
+    'fourier_2': 'Fourier series degree 2',
+    'fourier_3': 'Fourier series degree 3',
+    'fourier_4': 'Fourier series degree 4',
+    'fourier_5': 'Fourier series degree 5',
+}
+
+classification_datasets = {
+    'circle': 'Circle',
+    '3_circles': '3 Circles',
+    'square': 'Square',
+    '4_squares': '4 Squares',
+    'crown': 'Crown',
+    'tricrown': 'Tricrown',
+    'wavy_lines': 'Wavy Lines',
+}
+
 def batch_loader(inputs, labels, batch_size):
 
-    inputs = torch.Tensor(inputs)
-    labels = torch.from_numpy(labels)
+    # Convert inputs and labels to tensors
+    inputs = torch.as_tensor(inputs, dtype=torch.float32)
+    labels = torch.as_tensor(labels)
+
+    # Generate shuffled indices
+    indices = torch.randperm(inputs.shape[0])
+
+    # Shuffle inputs and labels
+    inputs = inputs[indices]
+    labels = labels[indices]
 
     for start_idx in range(0, inputs.shape[0] - batch_size + 1, batch_size):
         idxs = slice(start_idx, start_idx + batch_size)
@@ -18,25 +44,77 @@ def batch_loader(inputs, labels, batch_size):
 
 
 def create_dataset(name, samples=1000, seed=0):
-    """Function to create training and test sets for classifying.
+    """Function to create datasets.
+
+    Classification: returns random 2D points with labels.
+    Regression (fourier_*): returns univariate x and y=f(x) pairs (as tensors).
 
     Args:
-        name (str): Name of the problem to create the dataset, to choose between
-            ['circle', '3 circles', 'square', '4 squares', 'crown', 'tricrown', 'wavy lines'].
-        samples (int): Number of points in the set, randomly located.
-            This argument is ignored if grid is specified.
+        name (str): Name of the problem to create the dataset, classification names
+            ['circle', '3 circles', 'square', '4 squares', 'crown', 'tricrown', 'wavy_lines']
+            or regression names ['fourier_1','fourier_2','fourier_3'].
+        samples (int): Number of points in the set.
         seed (int): Random seed
 
     Returns:
-        Dataset for the given problem (x, y)
+        Tuple (x, y):
+          - For classification: x is (N,2) tensor of points in [-1,1]^2, y is int labels tensor of shape (N,)
+          - For regression: x is (N,1) tensor of x in [-1,1], y is float tensor (N,) with function values
     """
     logger.debug(f'Create new dataset "{name}" with n={samples} points. (Random Seed: {seed})')
     torch.manual_seed(seed)
+
+    if name.startswith('fourier_'):
+        return _fourier(name, samples, seed)
+
     points = 1 - 2 * torch.rand(samples, 2)
 
     creator = globals()[f"_{name}"]
 
     x, y = creator(points)
+    return x, y
+
+
+def _fourier(name, samples=500, seed=0):
+    """
+    Build a real Fourier sum from the complex series:
+        coeff0 = 0.1
+        coeff_k = 0.15 + 0.15j  ->  a_k = 0.3, b_k = -0.3  for k >= 1
+    Dataset name must be 'fourier_<n>' with 1 <= n <= 5.
+    """
+    # Parse and validate name
+    if not isinstance(name, str) or not name.startswith("fourier_"):
+        raise NotImplementedError(f"Unknown fourier dataset {name}")
+    try:
+        degree = int(name.split("_", 1)[1])
+    except Exception:
+        raise NotImplementedError(f"Unknown fourier dataset {name}")
+    if degree < 1 or degree > 5:
+        raise NotImplementedError(f"Only orders 1–5 are implemented (got {degree})")
+
+    # Generate univariate x in [-1,1]
+    torch.manual_seed(seed)
+    x = torch.linspace(-1.0, 1.0, steps=samples).unsqueeze(1)
+
+    # Map [-1,1] to [-pi,pi]
+    pi = torch.pi
+    t = x.squeeze(1) * pi
+
+    # Coefficients from target_function
+    a0 = 0.1       # zero-frequency term
+    a_k = 0.3      # cos coefficients for k >= 1
+    b_k = -0.3     # sin coefficients for k >= 1
+
+    # Construct series through the requested degree
+    y = a0 * torch.ones_like(t)
+    for k in range(1, degree + 1):
+        y = y + a_k * torch.cos(k * t) + b_k * torch.sin(k * t)
+
+    # Normalize to [-1, 1]
+    max_abs = y.abs().max()
+    if max_abs > 0:
+        y = y / max_abs
+
     return x, y
 
 

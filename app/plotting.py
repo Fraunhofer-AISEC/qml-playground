@@ -3,6 +3,7 @@ import logging
 import numpy as np
 import pandas as pd
 import torch
+from click import style
 
 if not hasattr(np, 'bool8'):
     np.bool8 = np.bool_
@@ -159,6 +160,24 @@ def make_performance_plot(data):
     return fig
 
 
+
+
+def make_regression_data_plot(x_full, y_full, y_full_noisy, train_mask=None):
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x_full, y=y_full, mode='lines', name='Ground Truth'))
+    if train_mask is not None and len(train_mask) == len(x_full):
+        xt = np.array(x_full)[train_mask]
+        yt = np.array(y_full_noisy)[train_mask]
+        fig.add_trace(go.Scatter(x=xt, y=yt, mode='markers', name='Train Samples', marker=dict(size=4, color="orange")))
+    fig.update_layout(
+        autosize=False,
+        showlegend=False,
+        width=250,
+        height=250,
+        margin=dict(b=0, t=15, l=0, r=0)
+    )
+    fig.update_xaxes(range=[-1, 1])
+    return fig
 
 
 def make_data_plot(points, labels):
@@ -378,6 +397,51 @@ def make_result_plot(points, predictions, labels, dataset="circle"):
     fig.update_xaxes(showticklabels=False, range=[-1, 1])
     fig.update_yaxes(showticklabels=False, range=[-1, 1])
 
+    return fig
+
+
+def make_regression_decision_plot():
+    fig = go.Figure()
+    # 1: Ground truth curve
+    fig.add_trace(go.Scatter(x=[], y=[], mode='lines', name='Ground Truth', line=dict(dash="dash", color="grey")))
+    # 2: Prediction mean
+    fig.add_trace(go.Scatter(x=[], y=[], mode='lines', name='Prediction Mean'))
+    # 3: Lower bound
+    fig.add_trace(go.Scatter(x=[], y=[], mode='lines', name='Uncertainty Lower Bound', line=dict(width=0)))
+    # 4: Upper bound with fill to previous (lower)
+    fig.add_trace(go.Scatter(x=[], y=[], mode='lines', name='Uncertainty Upper Bound', fill='tonexty', line=dict(width=0), fillcolor='rgba(0,0,255,0.2)'))
+    # 5: Training data points
+    fig.add_trace(go.Scatter(x=[], y=[], mode='markers', name='Training Sample', marker=dict(size=4, color="orange", symbol="circle-open")))
+
+    fig.update_layout(
+        showlegend=False,
+        autosize=False,
+        width=300,
+        height=250,
+        margin=dict(b=0, t=15, l=0, r=0),
+    )
+    fig.update_xaxes(range=[-1, 1])
+    return fig
+
+
+def make_regression_results_plot():
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=[], y=[],
+                             mode='markers',
+                             name='Residuals',
+                             marker=dict(size=3,
+                                         color="red",
+                                         )
+                             ))
+    fig.add_hline(y=0, line_width=1, line_dash="dash", line_color="gray")
+    fig.update_layout(
+        autosize=False,
+        width=300,
+        height=150,
+        margin=dict(b=0, t=0, l=0, r=0)
+    )
+    fig.update_xaxes(range=[-1, 1])
+    fig.update_yaxes(range=[-2, 2])
     return fig
 
 

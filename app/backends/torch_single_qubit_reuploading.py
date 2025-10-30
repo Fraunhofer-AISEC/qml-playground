@@ -67,11 +67,16 @@ class SingleQubitReuploadingTorch(nn.Module):
             list: List of quantum states after each layer, with each state being
                   a complex tensor of shape [batch_size, 2]
         """
-        X = nn.functional.pad(X, (0, 1), "constant", 1)
-        XR = torch.transpose(X.T.repeat(self.num_layers, 1, 1), 0, 2)
+        batch_size = X.shape[0]
+        n_features = X.shape[1]
+        n_angles = self.num_layers * 3
+        num_reps = n_angles // n_features + 1
+        X_expanded = X.repeat(1, num_reps)
+        X_expanded = X_expanded[:, :n_angles].reshape(batch_size, 3, self.num_layers)
+
         W = self.weights.T.repeat(X.shape[0], 1, 1)
         B = self.biases.T.repeat(X.shape[0], 1, 1)
-        angles = W * XR + B
+        angles = W * X_expanded + B
 
         ctheta = torch.cos(angles[:, 1, :] / 2)
         stheta = torch.sin(angles[:, 1, :] / 2)
