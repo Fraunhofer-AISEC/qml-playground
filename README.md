@@ -7,57 +7,75 @@
 
 # Quantum Machine Learning Playground
 
-The **Quantum Machine Learning (QML) Playground** is an interactive web application designed to visualize the inner workings of quantum machine learning models in an intuitive and educational manner. Inspired by classical tools like TensorFlow Playground, it focuses on parameterized quantum circuits (PQCs) and particularly the *data re-uploading universal quantum classifier*, offering visual metaphors like Bloch spheres and the novel Q-simplex for interpreting quantum state evolution.
+The **Quantum Machine Learning (QML) Playground** is an interactive web application designed to visualize and explore the inner workings of quantum machine learning models in an intuitive and educational way. Inspired by classical tools like TensorFlow Playground, it focuses on parameterized quantum circuits (PQCs) — particularly the *data re-uploading universal quantum classifier* — and introduces visual metaphors such as Bloch spheres and the **Q-simplex** to interpret quantum state evolution.
 
-This playground is ideal for learners, educators, and researchers who want to explore QML models without deep expertise in quantum computing hardware or simulation backends.
+Now extended beyond classification, the playground also supports **regression tasks**, **uncertainty quantification**, and **regularization techniques**, enabling deeper exploration of quantum model performance and generalization.
+
+This playground is ideal for learners, educators, and researchers who want to explore QML models without requiring deep expertise in quantum hardware or simulators.
 
 ---
 
 ## 🌐 Live Demo
+
 <p align="center">
   <img src="QMLPG_GUI.png" alt="Screenshot of the QML Playground" width="700"/>
 </p>
+
 Explore the QML Playground directly in your browser:
 
 👉 **[Try the Live Demo](https://websites.fraunhofer.de/qml-playground/)**
 
-No installation required. Perfect for quick experimentation, education, and outreach.
+No installation required — perfect for quick experimentation, education, and outreach.
 
 ---
 
-## 🧠 How the Quantum Classifier Works
+## 🧠 How the Quantum Model Works
 
-The playground demonstrates the **data re-uploading quantum classifier**, a variational quantum algorithm introduced by Pérez-Salinas et al. ([Quantum, 2020](https://quantum-journal.org/papers/q-2020-02-06-226/)). This architecture repeatedly embeds classical features into quantum states using trainable quantum gates — mimicking the depth and expressivity of classical neural networks.
+The playground demonstrates the **data re-uploading variational quantum model**, a flexible architecture introduced by Pérez-Salinas et al. ([Quantum, 2020](https://quantum-journal.org/papers/q-2020-02-06-226/)). This architecture repeatedly embeds classical features into quantum states using trainable gates, mimicking the depth and expressivity of classical neural networks.
 
-This classifier was chosen because its structure:
+Originally designed for classification, it now also supports **quantum regression**, expanding its educational and research potential.
 
-- Closely resembles other commonly used **variational quantum circuit (VQC)** architectures  
-- Is **simple enough to visualize intuitively**  
-- Is **powerful enough to be universal**, meaning it can approximate any function in principle (akin to the universal approximation theorem in classical ML)
+This model was chosen because it is:
 
-This makes it the ideal model for educational purposes and for understanding how quantum learning systems process information at the level of quantum state evolution.
+* Structurally similar to common **variational quantum circuit (VQC)** architectures
+* **Simple enough to visualize** intuitively
+* **Powerful enough to be universal**, capable of approximating any function in principle
+* Flexible enough to illustrate **training dynamics**, **regularization effects**, and **uncertainty estimates** for regression tasks
 
 ---
 
 ## ✨ Features
 
+### 🧩 Core Functionality
+
 * 🧠 **Real-time QML model training and visualization**
-* 🌐 **Visual Metaphors for Data and State Visualization**
-  * Bloch Sphere for single-qubit dynamics  
-  * Q-Simplex for entanglement and multi-qubit visualization
+* 🌐 **Visual Metaphors for Data and Quantum State Evolution**
+  * Bloch Sphere for single-qubit state dynamics
+  * Q-Simplex for multi-qubit and entanglement visualization
 * 🔍 **Layer-by-Layer Quantum Circuit Analysis**
-* 📉 **Interactive Performance Metrics**
-* 🎯 **Decision Boundary Visualizations**
-* 🧪 **Flexible Dataset and Hyperparameter Controls**
-* 🐳 **Docker Support for Deployment**
+* 📊 **Interactive Performance Metrics and Learning Curves**
+* 🎯 **Decision Boundary Visualizations (for classification)**
+* 🧪 **Flexible Dataset Generation and Hyperparameter Controls**
+
+### 📈 New in the Latest Version
+
+* 🔢 **Regression Task Support** – Go beyond classification to predict continuous target values using quantum circuits
+* ⚖️ **Regularization Options** – Add L1/L2 penalties to study overfitting and model smoothness
+* 🌫️ **Uncertainty Quantification (for Regression)** – Visualize predictive uncertainty through sampling-based variance estimation, highlighting how model confidence varies across the input space
+
+### 🐳 Deployment & Accessibility
+
+* 💻 **Browser-Based Interface** – Explore directly in your browser, no installation needed
+* 🐳 **Docker Support for Easy Deployment**
+* 📦 **Lightweight and Educational by Design**
 
 ---
 
 ## 🔧 Requirements
 
-* Python 3.11+  
-* Virtual environment (virtualenv)  
-* Required Python packages listed in `requirements.txt`  
+* Python 3.11+
+* Virtual environment (virtualenv)
+* Required Python packages listed in `requirements.txt`
 * Docker and Docker Compose (optional)
 
 ---
@@ -90,7 +108,9 @@ python app_dev.py
 Then visit: [http://127.0.0.1:8050/](http://127.0.0.1:8050/)
 
 ### Docker Deployment
-Pull the latest Docker image from the GitHub Container Registry: 
+
+Pull the latest Docker image from the GitHub Container Registry:
+
 ```bash
 docker pull ghcr.io/fraunhofer-aisec/qml-playground:latest
 ```
@@ -104,9 +124,9 @@ docker-compose down   # Stop container
 
 ## 🛠 Troubleshooting
 
-* Ensure all required packages are installed  
-* Make sure port 8050 (local) or 80 (Docker) is not in use  
-* Verify Docker Desktop is running (for Docker users)
+* Ensure all required packages are installed
+* Verify port 8050 (local) or 80 (Docker) is free
+* Make sure Docker Desktop is running (for Docker users)
 
 ---
 
@@ -114,7 +134,7 @@ docker-compose down   # Stop container
 
 If you use this tool in your research or presentations, please cite:
 
-> P. Debus, S. Issel, and K. Tscharke, "Quantum Machine Learning Playground," *IEEE Computer Graphics and Applications*, vol. 44, no. 05, pp. 40–53, Sept.-Oct. 2024.  
+> P. Debus, S. Issel, and K. Tscharke, "Quantum Machine Learning Playground," *IEEE Computer Graphics and Applications*, vol. 44, no. 05, pp. 40–53, Sept.–Oct. 2024.
 > DOI: [10.1109/MCG.2024.3456288](https://doi.ieeecomputersociety.org/10.1109/MCG.2024.3456288)
 
 The arXiv version of this paper is available here: [2507.17931](https://arxiv.org/abs/2507.17931)
@@ -123,6 +143,6 @@ The arXiv version of this paper is available here: [2507.17931](https://arxiv.or
 
 ## 🙋 Maintainer
 
-Developed and maintained by **[Pascal Debus](https://github.com/pdebus)**, [Quantum Security Technologies (QST)](https://www.aisec.fraunhofer.de/en/fields-of-expertise/CST/QST.html), Fraunhofer AISEC
+Developed and maintained by **[Pascal Debus](https://github.com/pdebus)**, [Quantum Security Technologies (QST)](https://www.aisec.fraunhofer.de/en/fields-of-expertise/CST/QST.html), Fraunhofer AISEC.
 
 If you find this work useful, feel free to connect or reach out for collaboration opportunities!
