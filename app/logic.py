@@ -658,7 +658,7 @@ def update_data(selected_task: str, selected_data_set: str):
 
     if selected_task == 'regression':
         # Create full domain and then mask out gaps for training
-        x_full, y_full = create_dataset(selected_data_set, samples=60, seed=42)
+        x_full, y_full = create_dataset(selected_data_set, samples=100, seed=42)
         x_full_np = x_full.squeeze(1).numpy()
         y_full_np = y_full.numpy()
 

@@ -562,9 +562,10 @@ def make_quantum_classifier_plot(num_qubits=2, num_layers=5, W=None, B=None, x_s
                 metric_value = combined_metric[i - 1, q]
                 color = get_color_from_combined_metric(metric_value, vmin, vmax)
 
+            square_size = 0.2
             fig.add_shape(type="rect",
-                          x0=x_gate - 0.15, y0=y - 0.15,
-                          x1=x_gate + 0.15, y1=y + 0.15,
+                          x0=x_gate - square_size, y0=y - square_size,
+                          x1=x_gate + square_size, y1=y + square_size,
                           line=dict(color="black"),
                           fillcolor=color)
 
@@ -620,7 +621,7 @@ def make_quantum_classifier_plot(num_qubits=2, num_layers=5, W=None, B=None, x_s
 
         # X-axis label for layer
         fig.add_trace(go.Scatter(
-            x=[x_gate], y=[min(y_positions[num_qubits]) - 0.25],
+            x=[x_gate], y=[min(y_positions[num_qubits]) - 0.3],
             text=[f"L{i}"],
             mode="text",
             textposition="bottom center",

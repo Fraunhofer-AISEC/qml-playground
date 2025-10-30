@@ -108,7 +108,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
             numClasses = Math.max(...labels) + 1;
         }
 
-        let traceOffset = num_qubits === 1 ? 7 : 6;
+        let traceOffset = 7;
         let tracesPerSubfigure = traceOffset + 4;
 
         let stateTraces = [];
@@ -275,7 +275,7 @@ window.dash_clientside = Object.assign({}, window.dash_clientside, {
                 return window.dash_clientside.no_update;
             }
 
-            let traceOffset = num_qubits === 1 ? 7 : 6;
+            let traceOffset = 7;
 
             let traceIdx = stateTraces.map((_, i) => traceOffset + i);
 

@@ -80,24 +80,32 @@ def make_tetrahedron(targets=None):
         )
         annotations.append(d)
 
-    # Define edges to highlight
-    edges_to_highlight = [(0, 3), (1, 2)]
-
     # Plot the tetrahedron edges with low opacity
-    for i, j, k in [[0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]]:
-        traces.append(go.Mesh3d(x=[vertices[i][0], vertices[j][0], vertices[k][0], vertices[i][0]],
-                                y=[vertices[i][1], vertices[j][1], vertices[k][1], vertices[i][1]],
-                                z=[vertices[i][2], vertices[j][2], vertices[k][2], vertices[i][2]],
-                                opacity=0.15,
-                                color='#179c7d'))
+    i = [0, 0, 0, 1]
+    j = [1, 2, 3, 2]
+    k = [2, 3, 1, 3]  # all faces CCW from outside
+
+    mesh = go.Mesh3d(
+        x=vertices[:, 0], y=vertices[:, 1], z=vertices[:, 2],
+        i=i, j=j, k=k,
+        opacity=0.15, color='#179c7d'
+    )
+    traces.append(mesh)
+
+    # Define edges
+    edges = [[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]]
+    edges_to_highlight = [[0,3], [1,2]]
+
     # Highlight specific edges
-    for edge in edges_to_highlight:
+    for edge in edges:
+        width = 4 if edge in edges_to_highlight else 2
+
         traces.append(go.Scatter3d(x=[vertices[edge[0]][0], vertices[edge[1]][0]],
                                    y=[vertices[edge[0]][1], vertices[edge[1]][1]],
                                    z=[vertices[edge[0]][2], vertices[edge[1]][2]],
                                    mode='lines',
                                    opacity=0.7,
-                                   line=dict(color='#179c7d', width=4)))
+                                   line=dict(color='#179c7d', width=width)))
 
     return traces, annotations
 
