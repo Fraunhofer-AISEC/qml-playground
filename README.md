@@ -7,11 +7,11 @@
 
 # Quantum Machine Learning Playground
 
-The **Quantum Machine Learning (QML) Playground** is an interactive web application designed to visualize and explore the inner workings of quantum machine learning models in an intuitive and educational way. Inspired by classical tools like TensorFlow Playground, it focuses on parameterized quantum circuits (PQCs) — particularly the *data re-uploading universal quantum classifier* — and introduces visual metaphors such as Bloch spheres and the **Q-simplex** to interpret quantum state evolution.
+The **Quantum Machine Learning (QML) Playground** is an interactive web application for visualizing and exploring the inner workings of quantum machine learning models in an intuitive, educational way. Inspired by classical tools like TensorFlow Playground, it focuses on parameterized quantum circuits (PQCs), in particular the *data re-uploading universal quantum classifier*. It uses visual metaphors such as Bloch spheres and the **Q-simplex** to interpret how quantum states evolve.
 
-Now extended beyond classification, the playground also supports **regression tasks**, **uncertainty quantification**, and **regularization techniques**, enabling deeper exploration of quantum model performance and generalization.
+The playground covers **classification and regression**, **regularization** and **uncertainty quantification**. It runs **entirely in your browser**: the quantum simulator, training and all visualizations are client-side, with no server and no installation.
 
-This playground is ideal for learners, educators, and researchers who want to explore QML models without requiring deep expertise in quantum hardware or simulators.
+It is meant for learners, educators and researchers who want to explore QML models without deep expertise in quantum hardware or simulators.
 
 ---
 
@@ -21,112 +21,92 @@ This playground is ideal for learners, educators, and researchers who want to ex
   <img src="QMLPG_GUI.png" alt="Screenshot of the QML Playground" width="700"/>
 </p>
 
-Explore the QML Playground directly in your browser:
+👉 **[Try the Live Demo](https://fraunhofer-aisec.github.io/qml-playground/)**
 
-👉 **[Try the Live Demo](https://websites.fraunhofer.de/qml-playground/)**
-
-No installation required — perfect for quick experimentation, education, and outreach.
+No installation required: ideal for quick experiments, teaching and outreach.
 
 ---
 
 ## 🧠 How the Quantum Model Works
 
-The playground demonstrates the **data re-uploading variational quantum model**, a flexible architecture introduced by Pérez-Salinas et al. ([Quantum, 2020](https://quantum-journal.org/papers/q-2020-02-06-226/)). This architecture repeatedly embeds classical features into quantum states using trainable gates, mimicking the depth and expressivity of classical neural networks.
-
-Originally designed for classification, it now also supports **quantum regression**, expanding its educational and research potential.
+The playground demonstrates the **data re-uploading variational quantum model** introduced by Pérez-Salinas et al. ([Quantum, 2020](https://quantum-journal.org/papers/q-2020-02-06-226/)). Every layer applies trainable rotations Rot(φ, θ, ω) = RZ(ω)·RY(θ)·RZ(φ) whose angles are set to w·x + b, so the classical input is embedded again in every layer, much like depth in a classical neural network. With two qubits, an entangling gate follows each layer.
 
 This model was chosen because it is:
 
 * Structurally similar to common **variational quantum circuit (VQC)** architectures
 * **Simple enough to visualize** intuitively
-* **Powerful enough to be universal**, capable of approximating any function in principle
-* Flexible enough to illustrate **training dynamics**, **regularization effects**, and **uncertainty estimates** for regression tasks
+* **Powerful enough to be universal**, able to approximate any function in principle
+* Well suited to illustrate **training dynamics**, **regularization effects**, **uncertainty estimates** and the model's **Fourier-series** nature
 
 ---
 
 ## ✨ Features
 
-### 🧩 Core Functionality
+### 🧩 Models and data
 
-* 🧠 **Real-time QML model training and visualization**
-* 🌐 **Visual Metaphors for Data and Quantum State Evolution**
-  * Bloch Sphere for single-qubit state dynamics
-  * Q-Simplex for multi-qubit and entanglement visualization
-* 🔍 **Layer-by-Layer Quantum Circuit Analysis**
-* 📊 **Interactive Performance Metrics and Learning Curves**
-* 🎯 **Decision Boundary Visualizations (for classification)**
-* 🧪 **Flexible Dataset Generation and Hyperparameter Controls**
+* 🧠 **Real-time training** of 1- and 2-qubit circuits with 1–15 layers (Adam, mini-batches, adjustable learning rate)
+* 🎯 **Classification** on seven 2-D datasets (circle, 3 circles, square, 4 squares, crown, tricrown, wavy lines)
+* 🔢 **Regression** on Fourier series of degree 1–5, with gaps in the training data
+* ⚖️ **L1/L2 regularization** to study overfitting and smoothness
+* 🌫️ **Uncertainty quantification** for regression: Monte Carlo sampling with noisy parameters, shown as a ±2σ band
+* 🏗️ **Architecture options**: CNOT, CZ or no entangler; data uploaded on all angles or on RY only; trainable or fixed (w = π) data weights
 
-### 📈 New in the Latest Version
+### 🔍 Seeing inside the circuit
 
-* 🔢 **Regression Task Support** – Go beyond classification to predict continuous target values using quantum circuits
-* ⚖️ **Regularization Options** – Add L1/L2 penalties to study overfitting and model smoothness
-* 🌫️ **Uncertainty Quantification (for Regression)** – Visualize predictive uncertainty through sampling-based variance estimation, highlighting how model confidence varies across the input space
+* 🧩 **Interactive circuit view** in the style of TensorFlow Playground: every gate shows its angle as a dial, data taps show how strongly each feature is uploaded, and **unit maps** show the Bloch components, purity, entanglement or the would-be prediction after every layer over the whole input space
+* 🔎 **Gate details**: click a gate for its parameters, current gradients and a histogram of its angle over the training data
+* 🧭 **Follow a sample**: hover a test point to trace it through the circuit, as a path on the Bloch sphere or in the Q-simplex, on every dial and on every unit map
+* 🌐 **Visual metaphors** for quantum states: the Bloch sphere for one qubit, the Q-simplex for two qubits and entanglement
 
-### 🐳 Deployment & Accessibility
+### 📊 Results and diagnostics
 
-* 💻 **Browser-Based Interface** – Explore directly in your browser, no installation needed
-* 🐳 **Docker Support for Easy Deployment**
-* 📦 **Lightweight and Educational by Design**
+* 🗺️ **Decision map** with the decision boundary, or the score of a single class
+* 📈 **Regression fit** with uncertainty band, and the **Fourier spectrum** of the model against the target
+* 📉 **Learning curves**, plus per-layer **gradient-norm** and **entanglement heatmaps** over training
+* 🌊 **Gradient-flow view** in the circuit that reveals layers and gates that barely learn
 
----
+### 🎛️ Usability
 
-## 🔧 Requirements
-
-* Python 3.11+
-* Virtual environment (virtualenv)
-* Required Python packages listed in `requirements.txt`
-* Docker and Docker Compose (optional)
+* ⏯️ Play, step, training speed and fast-forward, plus **replay** of any past epoch and resuming from it
+* 🔗 **Shareable links** with the settings, optionally including the trained parameters
+* 🌗 Light and dark mode; responsive layout
 
 ---
 
-## 🚀 Installation
+## 🚀 Getting Started
+
+Requires [Node.js](https://nodejs.org/) 20+.
 
 ```bash
-# 1. Clone this repository
 git clone https://github.com/fraunhofer-aisec/qml-playground
-cd qml-playground
-
-# 2. Set up virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# 3. Install dependencies
-pip install -r requirements.txt
+cd qml-playground/web
+npm install
+npm run dev        # http://localhost:5173/
 ```
+
+Other commands:
+
+```bash
+npm test           # Vitest suites (simulator, gradients, trainer, parity with the PyTorch reference)
+npm run lint
+npm run build      # static site in web/dist/
+npm run preview    # serve the build
+```
+
+The web app is a static site. `.github/workflows/pages.yml` builds, tests and deploys it to **GitHub Pages** on every push to `main`. See [`web/README.md`](web/README.md) for the architecture, deployment and the differences from the reference implementation.
 
 ---
 
-## 🖥️ Running the Application
+## 🗂️ Repository Layout
 
-### Local Development
-
-```bash
-python app_dev.py
+```
+web/       the QML Playground (Vite + React + TypeScript + Plotly.js), main version
+legacy/    the original Plotly Dash + PyTorch app with its Docker/nginx setup (legacy)
 ```
 
-Then visit: [http://127.0.0.1:8050/](http://127.0.0.1:8050/)
+### 🐍 Legacy Dash version
 
-### Docker Deployment
-
-Pull the latest Docker image from the GitHub Container Registry:
-
-```bash
-docker pull ghcr.io/fraunhofer-aisec/qml-playground:latest
-```
-
-```bash
-docker-compose up -d  # Start container
-docker-compose down   # Stop container
-```
-
----
-
-## 🛠 Troubleshooting
-
-* Ensure all required packages are installed
-* Verify port 8050 (local) or 80 (Docker) is free
-* Make sure Docker Desktop is running (for Docker users)
+The original server-based version (Python, Dash, PyTorch) lives in [`legacy/`](legacy/). It is no longer the main version, but it is kept as the numerical reference for the web app's tests and for existing Docker deployments. Installation, local development and Docker instructions are in [`legacy/README.md`](legacy/README.md).
 
 ---
 

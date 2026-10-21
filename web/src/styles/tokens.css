@@ -1,0 +1,42 @@
+/* Design tokens. Plot colors mirror these in src/viz/theme.ts. */
+:root {
+  color-scheme: light;
+  --bg: #f3f6f5;
+  --surface: #ffffff;
+  --surface-2: #f6f9f8;
+  --border: #dde5e2;
+  --border-strong: #b7c4c0;
+  --text: #1d2a26;
+  --muted: #6b7a75;
+  --accent: #179c7d;
+  --accent-strong: #006247;
+  --accent-soft: #e2f3ee;
+  --on-accent: #ffffff;
+  --danger: #c62828;
+  --shadow: 0 1px 2px rgba(16, 40, 32, 0.06), 0 4px 16px rgba(16, 40, 32, 0.05);
+  --hero-bg: linear-gradient(115deg, #0b5c49 0%, #13876c 48%, #2aa98a 100%);
+  --on-hero: #ffffff;
+  --radius: 12px;
+  --radius-sm: 8px;
+  /* System fonts only: no externally loaded web fonts (GDPR). */
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0f1514;
+  --surface: #161e1c;
+  --surface-2: #1b2522;
+  --border: #2a3532;
+  --border-strong: #4a5a56;
+  --text: #e3ebe8;
+  --muted: #93a39e;
+  --accent: #2bc49f;
+  --accent-strong: #7fe0c6;
+  --accent-soft: #173a31;
+  --on-accent: #06231b;
+  --danger: #ff6b6b;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.25);
+  --hero-bg: linear-gradient(115deg, #0c2b25 0%, #104237 52%, #155a4a 100%);
+  --on-hero: #e9f6f2;
+}

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interactive playground for training and visualizing quantum machine learning models (data re-uploading circuits) in the browser." />
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%qmlpg-icon.svg" />
+    <title>QML Playground</title>
+    <script>
+      // Apply the stored theme before first paint to avoid a flash. Light is the default.
+      try {
+        var m = localStorage.getItem('qmlpg-theme');
+        var dark = m === 'dark' || (m === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>The QML Playground runs entirely in your browser and needs JavaScript.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

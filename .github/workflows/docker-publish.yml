@@ -1,14 +1,10 @@
-name: Build and publish Docker image to GHCR
+name: Build and publish the legacy Dash Docker image to GHCR
 
 on:
   push:
     branches: [main]
     paths:
-      - 'app/**'
-      - 'Dockerfile'
-      - 'docker-compose.yml'
-      - 'nginx.conf'
-      - 'requirements.txt'
+      - 'legacy/**'
   release:
     types: [published]
 
@@ -51,7 +47,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: legacy
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
